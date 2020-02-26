@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.smartwork.dal.mapper.ext.SysUserExtMapper" >
+      <resultMap id="BaseResultMap" type="org.smartwork.dal.entity.SysUser" extends="org.smartwork.dal.mapper.SysUserMapper.BaseResultMap">
+      </resultMap>
+       <!--多条件查询用户-->
+	    <resultMap id="UserBaseResultMap" type="org.forbes.comm.vo.UserVo" >
+	        <!-- 主键 -->
+	        <id column="id" property="id" jdbcType="BIGINT" />
+	        <!-- 登录账号 -->
+	        <id column="username" property="username" jdbcType="VARCHAR" />
+	        <!-- 状态 -->
+	        <id column="status" property="status" jdbcType="VARCHAR" />
+	        <id column="admin_flag" property="adminFlag" jdbcType="VARCHAR" />
+	        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	        <!-- 创建时间 -->
+	        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	        <!-- 更新人 -->
+	        <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+	        <!-- 更新时间 -->
+	        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	        <!-- 密码 -->
+	        <result column="password" property="password" jdbcType="VARCHAR" />
+	        <!-- md5密码盐 -->
+	        <result column="salt" property="salt" jdbcType="VARCHAR" />
+	        <!-- 头像 -->
+	        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+	        <!-- 邮件 -->
+	        <result column="email" property="email" jdbcType="VARCHAR" />
+	        <!-- 电话 -->
+	        <result column="phone" property="phone" jdbcType="VARCHAR" />
+	        <!-- 姓名 -->
+	        <result column="realname" property="realname" jdbcType="VARCHAR" />
+	    </resultMap>
+      <sql id="Base_Column_List" >
+       <include refid="org.smartwork.dal.mapper.SysUserMapper.Base_Column_List" />
+      </sql>
+	  <!--根据用户名查询用户-->
+	  <select id="getUserByName" resultMap="BaseResultMap">
+	  	SELECT 
+		  <include refid="Base_Column_List" />
+		FROM
+		  `f_sys_user` fsu 
+		WHERE fsu.`username` = #{username,jdbcType=VARCHAR} 
+		  OR fsu.`phone` = #{username,jdbcType=VARCHAR}  
+		  OR fsu.`email` = #{username,jdbcType=VARCHAR} 
+	  </select>
+	 <!--根据用户ID查询角色信息-->
+	 <select id="selectRole"  resultType="java.lang.String">
+		 SELECT 
+			  sr.`role_name` 
+			FROM
+			  `f_sys_role` sr 
+			WHERE EXISTS 
+			  (SELECT 
+			    1 
+			  FROM
+			    `f_sys_user_role` sur 
+			  WHERE sur.`role_id` = sr.`id` 
+			    AND sur.`user_id` = #{userId,jdbcType=BIGINT})
+	 </select>
+    <!--多条件查询用户+分页-->
+    <select id="pageUsers" parameterType="org.forbes.comm.model.SysUserDto" resultMap="UserBaseResultMap">
+        SELECT
+          <include refid="Base_Column_List" />
+        FROM
+        f_sys_user AS fsu
+        <where>
+            <if test="sysUser.status != null and sysUser.status != '' and sysUser.status != 'null'">
+                AND fsu.status=#{sysUser.status,jdbcType=VARCHAR}
+            </if>
+            <if test="sysUser.username != null and sysUser.username  != '' and sysUser.username  != 'null'">
+                AND fsu.username=#{sysUser.username,jdbcType=VARCHAR}
+            </if>
+            <if test="sysUser.realname != null and sysUser.realname != '' and sysUser.realname != 'null'">
+                AND fsu.realname like concat('\'%',#{sysUser.realname,jdbcType=VARCHAR},'%\'')
+            </if>
+        </where>
+    </select>
+</mapper>

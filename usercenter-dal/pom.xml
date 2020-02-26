@@ -8,14 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>usercenter-biz</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>com.smartwork</groupId>
-            <artifactId>usercenter-dal</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+
+    <artifactId>usercenter-dal</artifactId>
+
     <build>
         <plugins>
             <!-- 打包跳过测试 -->
@@ -27,5 +22,15 @@
                 </configuration>
             </plugin>
         </plugins>
+        <!--打包XML文件-->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 </project>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.smartwork.dal.mapper.SysUserMapper" >
+  <resultMap id="BaseResultMap" type="org.smartwork.dal.entity.SysUser" >
+    <!-- 主键 -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <!-- 创建时间 -->
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <!-- 更新人 -->
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <!-- 更新时间 -->
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <!-- 登录账号 -->
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <!-- 状态 -->
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="admin_flag" property="adminFlag" jdbcType="VARCHAR" />
+    <!-- 密码 -->
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <!-- md5密码盐 -->
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <!-- 头像 -->
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    <!-- 邮件 -->
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <!-- 电话 -->
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+     <!-- 姓名 -->
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, username, status, create_by, create_time, update_by, update_time, password, salt, 
+    avatar, email, phone,realname,admin_flag
+  </sql>
+</mapper>
