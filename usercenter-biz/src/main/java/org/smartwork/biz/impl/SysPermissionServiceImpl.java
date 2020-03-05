@@ -69,7 +69,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
      * @param parentId void
      * @创建人 huanghy
      * @创建时间 2019年12月10日 下午2:03:19
-     * @修改人 (修改了该文件，请填上修改人的名字)
+     * @修改人 (修改了该文件 ， 请填上修改人的名字)
      * @修改日期 (请填上修改该文件时的日期)
      */
     @Transactional(propagation = Propagation.MANDATORY, rollbackFor = Exception.class)
@@ -90,7 +90,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
      * @param parentId void
      * @创建人 huanghy
      * @创建时间 2019年12月10日 下午2:10:16
-     * @修改人 (修改了该文件，请填上修改人的名字)
+     * @修改人 (修改了该文件 ， 请填上修改人的名字)
      * @修改日期 (请填上修改该文件时的日期)
      */
     @Transactional(propagation = Propagation.MANDATORY, rollbackFor = Exception.class)
@@ -112,7 +112,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
      * @return boolean
      * @创建人 huanghy
      * @创建时间 2019年12月10日 下午2:30:59
-     * @修改人 (修改了该文件，请填上修改人的名字)
+     * @修改人 (修改了该文件 ， 请填上修改人的名字)
      * @修改日期 (请填上修改该文件时的日期)
      */
     @Transactional(rollbackFor = Exception.class)
@@ -132,7 +132,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
      * @return boolean
      * @创建人 huanghy
      * @创建时间 2019年12月10日 下午2:32:30
-     * @修改人 (修改了该文件，请填上修改人的名字)
+     * @修改人 (修改了该文件 ， 请填上修改人的名字)
      * @修改日期 (请填上修改该文件时的日期)
      */
     @Transactional(rollbackFor = Exception.class)
@@ -140,7 +140,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     public boolean removeByIds(Collection<? extends Serializable> idList) {
         idList.forEach(id -> {
             int childCount = baseMapper.selectCount(new QueryWrapper<SysPermission>().eq(PermsCommonConstant.PARENT_ID, id));
-            if(childCount > 0){
+            if (childCount > 0) {
                 throw new ForbesException(BizResultEnum.PERMISSION_CHILD_EXISTS.getBizCode(), BizResultEnum.PERMISSION_CHILD_EXISTS.getBizMessage());
             }
         });
@@ -155,7 +155,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
      * @return List<PermissionVo>
      * @创建人 huanghy
      * @创建时间 2019年12月10日 上午11:34:09
-     * @修改人 (修改了该文件，请填上修改人的名字)
+     * @修改人 (修改了该文件 ， 请填上修改人的名字)
      * @修改日期 (请填上修改该文件时的日期)
      */
     public List<SysPermission> searchPersByRoleIds(List<Long> roleIds) {

@@ -8,11 +8,23 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>usercenter-biz</artifactId>
+    <artifactId>usercenter-api</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.smartwork</groupId>
+            <artifactId>usercenter-comm</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.smartwork</groupId>
             <artifactId>usercenter-dal</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.smartwork</groupId>
+            <artifactId>usercenter-biz</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

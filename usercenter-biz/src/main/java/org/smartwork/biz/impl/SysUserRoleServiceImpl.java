@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 @Service
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements ISysUserRoleService {
-	
+
 }

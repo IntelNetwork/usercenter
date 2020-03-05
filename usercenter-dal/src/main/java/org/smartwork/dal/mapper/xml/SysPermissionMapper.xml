@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.smartwork.dal.mapper.SysPermissionMapper" >
-  <resultMap id="BaseResultMap" type="org.smartwork.dal.entity.SysPermission" >
-    <!-- 主键 -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <!-- 创建时间 -->
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <!-- 更新人 -->
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-    <!-- 更新时间 -->
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <!-- 父级id -->
-    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
-    <!-- 资源名称 -->
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <!-- 菜单权限编码 -->
-    <result column="perms" property="perms" jdbcType="VARCHAR" />
-    <!-- 组件 -->
-    <result column="component" property="component" jdbcType="VARCHAR" />
-    <!-- 组件名称 -->
-    <result column="component_name" property="componentName" jdbcType="VARCHAR" />
-    <!-- 是否聚合子路由 -->
-    <result column="always_show" property="alwaysShow" jdbcType="VARCHAR" />
-    <!-- 是否路由 -->
-    <result column="is_route" property="isRoute" jdbcType="VARCHAR" />
-    <result column="is_leaf" property="isLeaf" jdbcType="VARCHAR" />
-    <!-- 是否隐藏 -->
-    <result column="is_hidden" property="isHidden" jdbcType="VARCHAR" />
-    <result column="sort_no" property="sortNo" jdbcType="INTEGER" />
-    <!-- 描述 -->
-    <result column="description" property="description" jdbcType="VARCHAR" />
-    <!-- 路由请求地址 -->
-    <result column="redirect" property="redirect" jdbcType="VARCHAR" />
-    <!-- 后台请求地址 -->
-    <result column="url" property="url" jdbcType="VARCHAR" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="org.smartwork.dal.entity.SysPermission" extends="BaseResultMap" >
-    <!-- 菜单图标 -->
-    <result column="icon" property="icon" jdbcType="VARCHAR" />
-    <!-- 菜单类型 -->
-    <result column="type" property="type" jdbcType="BIGINT" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, create_by, create_time, update_by, update_time, parent_id, name, perms, component, 
-    component_name, always_show, is_route, is_leaf, is_hidden, sort_no, description, 
-    redirect, url,icon,type
-  </sql>
+<mapper namespace="org.smartwork.dal.mapper.SysPermissionMapper">
+    <resultMap id="BaseResultMap" type="org.smartwork.dal.entity.SysPermission">
+        <!-- 主键 -->
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <!-- 创建时间 -->
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <!-- 更新人 -->
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <!-- 更新时间 -->
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <!-- 父级id -->
+        <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <!-- 资源名称 -->
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <!-- 菜单权限编码 -->
+        <result column="perms" property="perms" jdbcType="VARCHAR"/>
+        <!-- 组件 -->
+        <result column="component" property="component" jdbcType="VARCHAR"/>
+        <!-- 组件名称 -->
+        <result column="component_name" property="componentName" jdbcType="VARCHAR"/>
+        <!-- 是否聚合子路由 -->
+        <result column="always_show" property="alwaysShow" jdbcType="VARCHAR"/>
+        <!-- 是否路由 -->
+        <result column="is_route" property="isRoute" jdbcType="VARCHAR"/>
+        <result column="is_leaf" property="isLeaf" jdbcType="VARCHAR"/>
+        <!-- 是否隐藏 -->
+        <result column="is_hidden" property="isHidden" jdbcType="VARCHAR"/>
+        <result column="sort_no" property="sortNo" jdbcType="INTEGER"/>
+        <!-- 描述 -->
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <!-- 路由请求地址 -->
+        <result column="redirect" property="redirect" jdbcType="VARCHAR"/>
+        <!-- 后台请求地址 -->
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="org.smartwork.dal.entity.SysPermission" extends="BaseResultMap">
+        <!-- 菜单图标 -->
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <!-- 菜单类型 -->
+        <result column="type" property="type" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, create_by, create_time, update_by, update_time, parent_id, name, perms, component,
+        component_name, always_show, is_route, is_leaf, is_hidden, sort_no, description,
+        redirect, url,icon,type
+    </sql>
 </mapper>

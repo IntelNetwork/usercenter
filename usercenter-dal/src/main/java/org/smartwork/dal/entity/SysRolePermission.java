@@ -9,18 +9,19 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.forbes.comm.entity.BaseEntity;
+
 /**
  * Table: f_sys_role_permission
  */
 @Data
-@ApiModel(description="角色权限信息")
+@ApiModel(description = "角色权限信息")
 @EqualsAndHashCode(callSuper = false)
 @TableName("f_sys_role_permission")
 public class SysRolePermission extends BaseEntity {
-   
-	private static final long serialVersionUID = 2058286503703627828L;
 
-	/**
+    private static final long serialVersionUID = 2058286503703627828L;
+
+    /**
      * 角色ID
      * Table:     f_sys_role_permission
      * Column:    role_id

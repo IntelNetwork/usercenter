@@ -10,5 +10,5 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 @Service
 public class SysRolePermissionServiceImpl
         extends ServiceImpl<SysRolePermissionMapper, SysRolePermission> implements ISysRolePermissionService {
-	
+
 }

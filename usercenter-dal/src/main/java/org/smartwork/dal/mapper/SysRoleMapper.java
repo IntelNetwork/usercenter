@@ -4,4 +4,5 @@ import org.smartwork.dal.entity.SysRole;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-public interface SysRoleMapper  extends BaseMapper<SysRole>   {}
+public interface SysRoleMapper extends BaseMapper<SysRole> {
+}

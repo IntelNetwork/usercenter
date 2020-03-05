@@ -16,20 +16,20 @@ import org.forbes.comm.entity.BaseEntity;
  * Table: f_sys_permission
  */
 @Data
-@ApiModel(description="权限信息")
+@ApiModel(description = "权限信息")
 @EqualsAndHashCode(callSuper = false)
 @TableName("f_sys_permission")
 public class SysPermission extends BaseEntity {
-   
-	private static final long serialVersionUID = 6430290986069297694L;
 
-	/**
+    private static final long serialVersionUID = 6430290986069297694L;
+
+    /**
      * 父级id
      * Table:     f_sys_permission
      * Column:    parent_id
      * Nullable:  true
      */
-	@ApiModelProperty(value = "父级id",example="-1")
+    @ApiModelProperty(value = "父级id", example = "-1")
     private Long parentId;
 
     /**
@@ -38,7 +38,7 @@ public class SysPermission extends BaseEntity {
      * Column:    name
      * Nullable:  true
      */
-    @ApiModelProperty(value = "资源名称",required = true)
+    @ApiModelProperty(value = "资源名称", required = true)
     @NotEmpty(message = "资源名称为空")
     private String name;
 
@@ -48,7 +48,7 @@ public class SysPermission extends BaseEntity {
      * Column:    perms
      * Nullable:  true
      */
-    @ApiModelProperty(value = "菜单权限编码",required = true)
+    @ApiModelProperty(value = "菜单权限编码", required = true)
     @NotEmpty(message = "菜单权限编码为空")
     private String perms;
 
@@ -76,8 +76,8 @@ public class SysPermission extends BaseEntity {
      * Column:    always_show
      * Nullable:  true
      */
-    @ApiModelProperty(value = "是否聚合子路由",required = true)
-    @NotEmpty(message="是否聚合子路由为空",groups = SaveValid.class)
+    @ApiModelProperty(value = "是否聚合子路由", required = true)
+    @NotEmpty(message = "是否聚合子路由为空", groups = SaveValid.class)
     private String alwaysShow;
 
     /**
@@ -86,11 +86,12 @@ public class SysPermission extends BaseEntity {
      * Column:    is_route
      * Nullable:  true
      */
-    @ApiModelProperty(value = "是否路由",required = true)
-    @NotEmpty(message="是否路由为空",groups = SaveValid.class)
+    @ApiModelProperty(value = "是否路由", required = true)
+    @NotEmpty(message = "是否路由为空", groups = SaveValid.class)
     private String isRoute;
 
-    /**是否子集
+    /**
+     * 是否子集
      * Table:     f_sys_permission
      * Column:    is_leaf
      * Nullable:  true
@@ -107,12 +108,13 @@ public class SysPermission extends BaseEntity {
     @ApiModelProperty(value = "是否隐藏")
     private String isHidden;
 
-    /**排序号
+    /**
+     * 排序号
      * Table:     f_sys_permission
      * Column:    sort_no
      * Nullable:  true
      */
-    @ApiModelProperty(value = "排序号",example="0")
+    @ApiModelProperty(value = "排序号", example = "0")
     private Integer sortNo;
 
     /**
@@ -130,8 +132,8 @@ public class SysPermission extends BaseEntity {
      * Column:    redirect
      * Nullable:  true
      */
-    @ApiModelProperty(value = "路由请求地址",required = true)
-    @NotEmpty(message = "路由请求地址为空",groups = SaveValid.class)
+    @ApiModelProperty(value = "路由请求地址", required = true)
+    @NotEmpty(message = "路由请求地址为空", groups = SaveValid.class)
     private String redirect;
 
     /**
@@ -140,8 +142,8 @@ public class SysPermission extends BaseEntity {
      * Column:    url
      * Nullable:  true
      */
-    @ApiModelProperty(value = "后台请求地址",required = true)
-    @NotEmpty(message = "后台请求地址为空",groups = SaveValid.class)
+    @ApiModelProperty(value = "后台请求地址", required = true)
+    @NotEmpty(message = "后台请求地址为空", groups = SaveValid.class)
     private String url;
 
     /**
@@ -159,8 +161,8 @@ public class SysPermission extends BaseEntity {
      * Column:    type
      * Nullable:  true
      */
-    @ApiModelProperty(value = "类型",example="0",required = true)
-    @NotNull(message="类型为空",groups = SaveValid.class)
+    @ApiModelProperty(value = "类型", example = "0", required = true)
+    @NotNull(message = "类型为空", groups = SaveValid.class)
     private Long type;
 
     /**
@@ -169,8 +171,8 @@ public class SysPermission extends BaseEntity {
      * Column:    type
      * Nullable:  true
      */
-    @ApiModelProperty(value = "等级",example="0",required = true)
-    @NotNull(message="等级为空",groups = SaveValid.class)
+    @ApiModelProperty(value = "等级", example = "0", required = true)
+    @NotNull(message = "等级为空", groups = SaveValid.class)
     private Long grade;
 
 }
