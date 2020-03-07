@@ -73,7 +73,7 @@ public class UserApiProvider {
         sendMap.put("content",content);
         sendMap.put("busCode", BusCodeEnum.REG_VERI_CODE.getCode());
         sendMap.put("msgId", IDCreater.newID32());
-        kafkaTemplate.send("sendSms", JSON.toJSONString(sendMap));
+        kafkaTemplate.send("topicSms", JSON.toJSONString(sendMap));
         redisUtil.set(codeKey,content,60);
         return result;
     }
@@ -100,7 +100,7 @@ public class UserApiProvider {
      */
     @ApiOperation("登录验证码")
     @ApiImplicitParam(value = "mobile", name = "手机号")
-    @RequestMapping(value = "/veri-code", method = RequestMethod.GET)
+    @RequestMapping(value = "/login-veri-code", method = RequestMethod.GET)
     public Result<?> loginCode(@RequestParam(name = "mobile", required = true) String mobile) {
         Result<?> result = new Result<>();
         if (!ConvertUtils.validateMobile(mobile)){
@@ -133,13 +133,14 @@ public class UserApiProvider {
     }
 
 
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ApiOperation("手机号登录")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "mobile", name = "手机号"),
-            @ApiImplicitParam(value = "mobileCode", name = "手机验证码")
-    })
+    /****
+     * 修改用户信息
+     * @param httpServletRequest
+     * @param sysUserDto
+     * @return
+     */
+    @RequestMapping(value = "/up-user", method = RequestMethod.POST)
+    @ApiOperation("修改用户信息")
     @ApiResponses(value = {
             @ApiResponse(code = 500, message = Result.LOGIN_NOT_USER_ERROR_MSG),
             @ApiResponse(code = 200, response = LoginVo.class, message = Result.LOGIN_MSG)

@@ -11,15 +11,21 @@
 
     <artifactId>usercenter-provider</artifactId>
     <dependencies>
-        <dependency>
+            <dependency>
+                <groupId>org.smartwork</groupId>
+                <artifactId>usercenter-dal</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
             <groupId>org.smartwork</groupId>
-            <artifactId>usercenter-dal</artifactId>
+            <artifactId>usercenter-biz</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.smartwork</groupId>
-            <artifactId>usercenter-biz</artifactId>
+            <artifactId>usercenter-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
