@@ -13,6 +13,7 @@ import java.util.Date;
 public class SysUserDto implements java.io.Serializable {
 
 
+    private static final long serialVersionUID = 6470357785568394951L;
 
 
     @ApiModelProperty(value = "头像")

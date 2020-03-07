@@ -14,6 +14,7 @@ import org.forbes.comm.enums.BusCodeEnum;
 import org.forbes.comm.enums.UserStausEnum;
 import org.forbes.comm.model.SysLoginModel;
 import org.forbes.comm.model.SysUserDto;
+import org.forbes.comm.service.KafkaProducers;
 import org.forbes.comm.utils.*;
 import org.forbes.comm.vo.LoginVo;
 import org.forbes.comm.vo.ResultEnum;
@@ -22,6 +23,8 @@ import org.smartwork.biz.ISysUserService;
 import org.forbes.comm.vo.Result;
 import org.smartwork.comm.GenderEnum;
 import org.smartwork.comm.UserBizResultEnum;
+import org.smartwork.comm.model.LoginApiUserDto;
+import org.smartwork.comm.model.RegistUserDto;
 import org.smartwork.dal.entity.SysUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +47,8 @@ public class UserApiProvider {
 
     @Autowired
     KafkaTemplate<String,Object>  kafkaTemplate;
+    @Autowired
+    KafkaProducers kafkaProducers;
     @Autowired
     RedisUtil redisUtil;
     @Autowired
@@ -73,8 +80,13 @@ public class UserApiProvider {
         sendMap.put("content",content);
         sendMap.put("busCode", BusCodeEnum.REG_VERI_CODE.getCode());
         sendMap.put("msgId", IDCreater.newID32());
-        kafkaTemplate.send("topicSms", JSON.toJSONString(sendMap));
-        redisUtil.set(codeKey,content,60);
+        kafkaProducers.msgProducer("topicSms",JSON.toJSONString(sendMap),o -> {
+            log.error("11111111111111111");
+            log.error("11111111111111111"+o.toString());
+        });
+        //设置超时时间
+        redisUtil.set(codeKey,content);
+        redisUtil.expire(codeKey, 60);
         return result;
     }
 
@@ -128,7 +140,9 @@ public class UserApiProvider {
         sendMap.put("busCode", BusCodeEnum.LOGIN_VERI_CODE.getCode());
         sendMap.put("msgId", IDCreater.newID32());
         kafkaTemplate.send("sendSms", JSON.toJSONString(sendMap));
-        redisUtil.set(codeKey,content,60);
+        //设置超时时间
+        redisUtil.set(codeKey,content);
+        redisUtil.expire(codeKey, 60);
         return result;
     }
 
@@ -234,10 +248,11 @@ public class UserApiProvider {
             @ApiResponse(code = 500, message = Result.LOGIN_NOT_USER_ERROR_MSG),
             @ApiResponse(code = 200, response = LoginVo.class, message = Result.LOGIN_MSG)
     })
-    public Result<LoginVo> login(@RequestParam(name = "mobile", required = true) String mobile,
-                                 @RequestParam(name = "mobileCode", required = true) String mobileCode) {
+    public Result<LoginVo> login(@RequestBody @Valid LoginApiUserDto loginApiUserDto) {
         Result<LoginVo> result = new Result<LoginVo>();
         try {
+            String mobile = loginApiUserDto.getMobile();
+            String mobileCode = loginApiUserDto.getMobileCode();
             SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>()
                     .eq("phone",mobile));
             if(ConvertUtils.isEmpty(sysUser)){
@@ -283,11 +298,12 @@ public class UserApiProvider {
             @ApiResponse(code = 500, message = Result.LOGIN_NOT_USER_ERROR_MSG),
             @ApiResponse(code = 200, response = LoginVo.class, message = Result.LOGIN_MSG)
     })
-    public Result<LoginVo> registMobile(@RequestParam(name = "mobile", required = true) String mobile,
-                                        @RequestParam(name = "realname", required = false) String realname,
-                                 @RequestParam(name = "mobileCode", required = true) String mobileCode) {
+    public Result<LoginVo> registMobile(@RequestBody @Valid RegistUserDto registUserDto) {
         Result<LoginVo> result = new Result<LoginVo>();
         try {
+            String mobile = registUserDto.getMobile();
+            String mobileCode = registUserDto.getMobileCode();
+            String realname = registUserDto.getRealname();
             SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>()
                     .eq("phone",mobile));
             if(ConvertUtils.isNotEmpty(sysUser)){
@@ -295,7 +311,7 @@ public class UserApiProvider {
                 result.setMessage(String.format(UserBizResultEnum.PHONE_EXISTS.getBizFormateMessage(),mobile));
                 return result;
             }
-            String codeKey = String.format(CommonConstant.PREFIX_LOGIN_CODE,mobile);
+            String codeKey = String.format(CommonConstant.PREFIX_AUTH_CODE,mobile);
             if(!redisUtil.hasKey(codeKey)){
                 result.setBizCode(UserBizResultEnum.LOGIN_CODE_NOT_EXISTS.getBizCode());
                 result.setMessage(UserBizResultEnum.LOGIN_CODE_NOT_EXISTS.getBizMessage());
@@ -309,6 +325,9 @@ public class UserApiProvider {
             }
             /**增加用户**/
             sysUser = new SysUser();
+            if(ConvertUtils.isNotEmpty(realname)){
+                sysUser.setRealname(realname);
+            }
             sysUser.setUsername(mobile);
             sysUser.setPhone(mobile);
             sysUser.setAdminFlag(AdminFlagEnum.ORDINARY.getCode());
@@ -325,6 +344,28 @@ public class UserApiProvider {
             log.error(String.valueOf(CommonConstant.SC_INTERNAL_SERVER_ERROR_500), e);
         }
         return result;
+    }
+
+
+    /***
+     * 退出登录
+     * @param request
+     * @param response
+     * @return
+     */
+    @ApiOperation("退出登录")
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public Result<Object> logout(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader(CommonConstant.X_ACCESS_TOKEN);
+        if (ConvertUtils.isNotEmpty(token)) {
+            //清空用户Token缓存
+            redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + token);
+            //清空用户角色缓存
+            String userName = JwtUtil.getUsername(token);
+            redisUtil.del(CommonConstant.PREFIX_USER_ROLE + userName);
+            log.info("退出成功");
+        }
+        return Result.ok(Result.LOGOUT_SUCCESS_MSG);
     }
 
 
