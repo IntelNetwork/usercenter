@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import org.smartwork.biz.ISysRoleService;
 import org.forbes.comm.constant.DataColumnConstant;
 import org.forbes.comm.enums.BizResultEnum;
@@ -70,7 +71,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                           List<RolePermissionDto> rolePermissionDtos) {
         //先删后加
         sysRolePermissionMapper.delete(new QueryWrapper<SysRolePermission>().eq(DataColumnConstant.ROLE_ID, roleId));
-
         if (ConvertUtils.isNotEmpty(rolePermissionDtos)) {
             rolePermissionDtos.stream().forEach(permissionIdRoleDto -> {
                 Long permissionId = permissionIdRoleDto.getPermissionId();
@@ -80,7 +80,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     SysPermission sysPermission = sysPermissionMapper.selectById(permissionId);
                     Long parentId = sysPermission.getParentId();
                     if (0 != parentId.longValue()) {
-                        long notParentCount = rolePermissionDtos.stream().filter(tDto -> parentId == tDto.getPermissionId()).count();
+                        long notParentCount = rolePermissionDtos.stream().filter(tDto -> parentId.equals(tDto.getPermissionId())).count();
                         if (0 == notParentCount) {
                             throw new ForbesException(BizResultEnum.PERMISSION_PARENT_NO_EXISTS.getBizCode(), String.format(BizResultEnum.PERMISSION_PARENT_NO_EXISTS.getBizFormateMessage(), sysPermission.getName()));
                         }

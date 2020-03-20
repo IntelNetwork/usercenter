@@ -11,6 +11,8 @@ import java.io.Serializable;
 public class LoginApiUserDto implements Serializable {
 
 
+    private static final long serialVersionUID = 203096984062329515L;
+
     @ApiModelProperty(value = "手机号")
     @NotEmpty(message = "手机号为空")
     private String mobile;

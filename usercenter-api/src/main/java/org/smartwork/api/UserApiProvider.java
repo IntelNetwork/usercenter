@@ -7,10 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.forbes.biz.IMsgLogService;
 import org.forbes.cache.UserCache;
 import org.forbes.comm.constant.CommonConstant;
 import org.forbes.comm.enums.AdminFlagEnum;
 import org.forbes.comm.enums.BusCodeEnum;
+import org.forbes.comm.enums.MsgTypeEnum;
 import org.forbes.comm.enums.UserStausEnum;
 import org.forbes.comm.model.SysLoginModel;
 import org.forbes.comm.model.SysUserDto;
@@ -28,7 +30,6 @@ import org.smartwork.comm.model.RegistUserDto;
 import org.smartwork.dal.entity.SysUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,15 +45,14 @@ import java.util.Map;
 @RequestMapping("${smartwork.verision}/user")
 public class UserApiProvider {
 
-
-    @Autowired
-    KafkaTemplate<String,Object>  kafkaTemplate;
     @Autowired
     KafkaProducers kafkaProducers;
     @Autowired
     RedisUtil redisUtil;
     @Autowired
     ISysUserService sysUserService;
+    @Autowired
+    IMsgLogService msgLogService;
 
     /*** 验证码发送
      * @param mobile
@@ -76,13 +76,16 @@ public class UserApiProvider {
         }
         String content = ConvertUtils.randomNext();
         Map<String,Object> sendMap = Maps.newHashMap();
+        String  msgId = IDCreater.newID32();
         sendMap.put("mobile",mobile);
         sendMap.put("content",content);
         sendMap.put("busCode", BusCodeEnum.REG_VERI_CODE.getCode());
-        sendMap.put("msgId", IDCreater.newID32());
-        kafkaProducers.msgProducer("topicSms",JSON.toJSONString(sendMap),o -> {
-            log.error("11111111111111111");
-            log.error("11111111111111111"+o.toString());
+        sendMap.put("msgId", msgId);
+        String sendMsg = JSON.toJSONString(sendMap);
+        kafkaProducers.msgProducer("topicSms",sendMsg,o->{
+            msgLogService.addMsgLog(msgId,0,true, MsgTypeEnum.SMS,sendMsg);
+        },o -> {
+            msgLogService.addMsgLog(msgId,0,false, MsgTypeEnum.SMS,sendMsg);
         });
         //设置超时时间
         redisUtil.set(codeKey,content);
@@ -133,13 +136,19 @@ public class UserApiProvider {
             result.setMessage(UserBizResultEnum.LOGIN_CODE_EXISTS.getBizMessage());
             return result;
         }
+        String msgId = IDCreater.newID32();
         String content = ConvertUtils.randomNext();
         Map<String,Object> sendMap = Maps.newHashMap();
         sendMap.put("mobile",mobile);
         sendMap.put("content",content);
         sendMap.put("busCode", BusCodeEnum.LOGIN_VERI_CODE.getCode());
-        sendMap.put("msgId", IDCreater.newID32());
-        kafkaTemplate.send("sendSms", JSON.toJSONString(sendMap));
+        sendMap.put("msgId",msgId);
+        String sendMsg = JSON.toJSONString(sendMap);
+        kafkaProducers.msgProducer("topicSms",sendMsg,o->{
+            msgLogService.addMsgLog(msgId,0,true, MsgTypeEnum.SMS,sendMsg);
+        },o -> {
+            msgLogService.addMsgLog(msgId,0,false, MsgTypeEnum.SMS,sendMsg);
+        });
         //设置超时时间
         redisUtil.set(codeKey,content);
         redisUtil.expire(codeKey, 60);
@@ -283,8 +292,8 @@ public class UserApiProvider {
     /***
      * 手机号注册
      * @param mobile
-     * @param realname
-     * @param mobileCode
+     *      * @param realname
+     *      * @param mobileCode
      * @return
      */
     @RequestMapping(value = "/regist-mobile", method = RequestMethod.POST)
