@@ -2,6 +2,7 @@ package org.smartwork.biz;
 
 import java.util.List;
 
+import org.forbes.comm.exception.ForbesException;
 import org.forbes.comm.model.SysUserDto;
 import org.forbes.comm.vo.UserVo;
 import org.smartwork.dal.entity.SysUser;
@@ -67,4 +68,10 @@ public interface ISysUserService extends IService<SysUser> {
      * @修改日期 (请填上修改该文件时的日期)
      */
     public void editUserWithRole(SysUserDto sysUserDto);
+
+    /***注册用户
+     * @param sysUser
+     * @throws ForbesException
+     */
+    void registMobile(SysUser sysUser) throws ForbesException;
 }

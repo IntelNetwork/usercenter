@@ -54,6 +54,37 @@ public class UserApiProvider {
     @Autowired
     IMsgLogService msgLogService;
 
+
+    /***
+     * 验证是否注册
+     * @param mobile
+     * @return
+     */
+    @ApiOperation("验证是否注册")
+    @ApiImplicitParam(value = "mobile", name = "手机号")
+    @RequestMapping(value = "/check-regist", method = RequestMethod.GET)
+    public Result<Boolean> checkRegist(@RequestParam(name = "mobile", required = true) String mobile) {
+        Result<Boolean> result = new Result<Boolean>();
+        result.setResult(true);
+        if (!ConvertUtils.validateMobile(mobile)){
+            result.setBizCode(UserBizResultEnum.MOBILE_FORMAT.getBizCode());
+            result.setMessage(UserBizResultEnum.MOBILE_FORMAT.getBizMessage());
+            result.setResult(false);
+            return result;
+        }
+        int mobileCount = sysUserService.count(new QueryWrapper<SysUser>()
+                .eq("phone",mobile));
+        if(0 < mobileCount){
+            result.setBizCode(UserBizResultEnum.PHONE_EXISTS.getBizCode());
+            result.setMessage(String.format(UserBizResultEnum.PHONE_EXISTS.getBizFormateMessage(),mobile));
+            result.setResult(false);
+            return result;
+        }
+        return result;
+    }
+
+
+
     /*** 验证码发送
      * @param mobile
      * @return
@@ -243,8 +274,7 @@ public class UserApiProvider {
 
     /***
      * 手机号登录
-     * @param mobile
-     * @param mobileCode
+     * @param loginApiUserDto
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -291,7 +321,7 @@ public class UserApiProvider {
 
     /***
      * 手机号注册
-     * @param mobile
+     * @param registUserDto
      *      * @param realname
      *      * @param mobileCode
      * @return
@@ -346,7 +376,7 @@ public class UserApiProvider {
             String passwordEncode = PasswordUtil.encrypt(mobile, mobile, salt);
             sysUser.setPassword(passwordEncode);
             sysUser.setStatus(UserStausEnum.NORMAL.getCode());
-            sysUserService.save(sysUser);
+            sysUserService.registMobile(sysUser);
             this.autoLogin(sysUser,result);
         } catch (Exception e) {
             result.error500(e.getMessage());

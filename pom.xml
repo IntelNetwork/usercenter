@@ -9,6 +9,7 @@
         <module>usercenter-biz</module>
         <module>usercenter-provider</module>
         <module>usercenter-api</module>
+        <module>usercenter-member</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

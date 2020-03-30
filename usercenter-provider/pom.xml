@@ -25,6 +25,12 @@
         </dependency>
         <dependency>
             <groupId>org.smartwork</groupId>
+            <artifactId>usercenter-member</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.smartwork</groupId>
             <artifactId>usercenter-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>

@@ -1,9 +1,12 @@
 package org.smartwork.biz.impl;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-
+import com.google.common.escape.Escapers;
+import org.forbes.comm.utils.Builder;
 import org.smartwork.biz.ISysUserService;
 import org.forbes.comm.constant.CommonConstant;
 import org.forbes.comm.constant.DataColumnConstant;
@@ -18,9 +21,11 @@ import org.forbes.comm.utils.PasswordUtil;
 import org.forbes.comm.vo.UserVo;
 import org.smartwork.dal.entity.SysUser;
 import org.smartwork.dal.entity.SysUserRole;
+import org.smartwork.dal.entity.ZGEarnings;
 import org.smartwork.dal.mapper.SysUserMapper;
 import org.smartwork.dal.mapper.SysUserRoleMapper;
 import org.smartwork.dal.mapper.ext.SysUserExtMapper;
+import org.smartwork.service.IZGEarningsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
@@ -39,6 +44,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     SysUserExtMapper sysUserExtMapper;
     @Autowired
     SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
+    IZGEarningsService earningsService;
 
     /***
      * getUserByName方法慨述:根据用户名查询用户
@@ -166,5 +173,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserRoleMapper.delete(new QueryWrapper<SysUserRole>().in(DataColumnConstant.USER_ID, idList));
         boolean delBool = SqlHelper.retBool(baseMapper.deleteBatchIds(idList));
         return delBool;
+    }
+
+
+
+    /***注册用户
+     * @param sysUser
+     * @throws ForbesException
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void registMobile(SysUser sysUser) throws ForbesException{
+        baseMapper.insert(sysUser);
+        earningsService.registEarnings(Builder.of(ZGEarnings::new)
+                .with(ZGEarnings::setUserId,sysUser.getId())
+                .with(ZGEarnings::setUserName,sysUser.getRealname())
+                .with(ZGEarnings::setAmount, BigDecimal.ZERO)
+                .with(ZGEarnings::setBeforeAmount,BigDecimal.ZERO)
+                .with(ZGEarnings::setHaveTime,new Date())
+                .build());
     }
 }
