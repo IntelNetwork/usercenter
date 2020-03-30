@@ -3,6 +3,8 @@ package org.smartwork.dal.entity;
 import javax.validation.constraints.NotEmpty;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.enums.SqlKeyword;
+import org.forbes.comm.annotations.QueryColumn;
 import org.forbes.comm.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,6 +32,7 @@ public class SysUser extends BaseEntity {
      */
     @ApiModelProperty(value = "登录账号", required = true)
     @NotEmpty(message = "登录账号为空")
+    @QueryColumn(column = "username",sqlKeyword = SqlKeyword.LIKE)
     private String username;
 
     /**
@@ -95,6 +98,7 @@ public class SysUser extends BaseEntity {
      * Nullable:  true
      */
     @ApiModelProperty(value = "姓名", required = true)
+    @QueryColumn(column = "realname",sqlKeyword = SqlKeyword.LIKE)
     private String realname;
 
 

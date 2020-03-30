@@ -4,6 +4,7 @@ package org.smartwork.dal.entity;
 import javax.validation.constraints.NotEmpty;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.forbes.comm.constant.SaveValid;
 import org.forbes.comm.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,7 +30,7 @@ public class SysRole extends BaseEntity {
      * Nullable:  true
      */
     @ApiModelProperty(value = "角色名称", required = true)
-    @NotEmpty(message = "角色名称为空")
+    @NotEmpty(message = "角色名称为空", groups = SaveValid.class)
     private String roleName;
 
     /**
@@ -39,7 +40,7 @@ public class SysRole extends BaseEntity {
      * Nullable:  true
      */
     @ApiModelProperty(value = "角色编码", required = true)
-    @NotEmpty(message = "角色编码为空")
+    @NotEmpty(message = "角色编码为空", groups = SaveValid.class)
     private String roleCode;
 
     /**

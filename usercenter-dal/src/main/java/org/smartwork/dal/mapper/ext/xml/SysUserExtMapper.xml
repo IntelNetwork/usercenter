@@ -71,10 +71,10 @@
                 AND fsu.status=#{sysUser.status,jdbcType=VARCHAR}
             </if>
             <if test="sysUser.username != null and sysUser.username  != '' and sysUser.username  != 'null'">
-                AND fsu.username=#{sysUser.username,jdbcType=VARCHAR}
+                AND fsu.username LIKE concat('%',#{sysUser.username,jdbcType=VARCHAR},'%')
             </if>
             <if test="sysUser.realname != null and sysUser.realname != '' and sysUser.realname != 'null'">
-                AND fsu.realname like concat('\'%',#{sysUser.realname,jdbcType=VARCHAR},'%\'')
+                AND fsu.realname LIKE concat('%',#{sysUser.realname,jdbcType=VARCHAR},'%')
             </if>
         </where>
     </select>
